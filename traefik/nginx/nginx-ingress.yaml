@@ -1,0 +1,19 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-ornek
+  namespace: ornek
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`kube.guven.uk`) && PathPrefix(`/istanbul/nginx`)
+      kind: Rule
+      services:
+        - name: nginx-service
+          port: 80
+      middlewares:
+        - name: strip-istanbul-prefix
+          namespace: ornek

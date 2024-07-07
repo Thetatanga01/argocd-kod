@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-argocd-ingress
+  namespace: argocd
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`argocd.guven.uk`)
+      kind: Rule
+      services:
+        - name: argocd-server
+          port: 80

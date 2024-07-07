@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-izmir
+spec:
+  destination:
+    name: ''
+    namespace: redis
+    server: 'https://192.168.0.151:6443'
+  source:
+    path: helm/redis
+    repoURL: https://github.com/Thetatanga01/argocd
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - izmir-values.yaml
+  sources: []
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

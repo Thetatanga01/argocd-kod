@@ -1,0 +1,37 @@
+apiVersion: v1 
+kind: Secret
+metadata:
+  name: traefik-dashboard-auth
+  namespace: traefik
+type: Opaque
+data: 
+  users: dHJhZWZpazokYXByMSQyeHI4Q0U5SSRwSzN4QTgxdlVBN2p5VG5ibVljQVowCgo= 
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata: 
+  name: traefik-dashboard-basicauth
+  namespace: traefik
+spec: 
+  basicAuth: 
+    secret: traefik-dashboard-auth
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard
+  namespace: traefik
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`ops.guven.local`,`ops.guven.uk`)
+      kind: Rule
+      middlewares:
+        - name: traefik-dashboard-basicauth
+          namespace: traefik
+      services:
+        - name: api@internal
+          kind: TraefikService
