@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-ankara
+spec:
+  destination:
+    name: ''
+    namespace: redis
+    server: 'https://172.16.0.10:6443'
+  source:
+    path: helm/redis
+    repoURL: https://github.com/Thetatanga01/argocd
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - ankara-values.yaml
+  sources: []
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
