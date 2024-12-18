@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgres-izmir
+spec:
+  destination:
+    name: ''
+    namespace: postgres
+    server: 'https://192.168.0.151:6443'
+  source:
+    path: helm/postgresql
+    repoURL: https://github.com/Thetatanga01/argocd
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - values.yaml
+  sources: []
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
